@@ -19,12 +19,14 @@ A Ruby on Rails application for managing darts tournaments with double eliminati
 ---
 ## Implementation Checklist
 ### Phase 1: Project Setup
-- [ ] Create new Rails 8 app with PostgreSQL, Tailwind, and Hotwire
-- [ ] Add and configure RSpec with FactoryBot and Shoulda Matchers
-- [ ] Configure database (create development and test databases)
+- [x] Create new Rails 8 app with PostgreSQL, Tailwind, and Hotwire
+- [x] Add and configure RSpec with FactoryBot and Shoulda Matchers
+- [x] Configure database (create development and test databases)
+- [x] Add .mise.toml for mise version management
 - [ ] Set up basic application layout with Tailwind (mobile-first)
-- [ ] Add a simple home page with "Create Tournament" button
-- [ ] Verify setup: `bin/dev` runs, RSpec works
+- [ ] Add a styled home page with "Create Tournament" button
+- [ ] Verify Turbo/Stimulus are working (quick test)
+- [ ] Verify setup: bin/dev runs, RSpec works, Stimulus loads
 ### Phase 2: Core Models
 - [ ] Generate Tournament model
   - name (string, required)
