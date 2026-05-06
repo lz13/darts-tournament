@@ -11,5 +11,13 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-   root "pages#home"
+  root "pages#home"
+
+  # Tournaments
+  resources :tournaments, only: [ :new, :create ]
+  # Public tournament view (share link)
+  get "t/:share_token", to: "tournaments#show", as: :public_tournament
+
+  # Admin tournament view
+  get "t/:share_token/admin/:admin_token", to: "tournaments#admin:", as: :admin_tournament
 end
