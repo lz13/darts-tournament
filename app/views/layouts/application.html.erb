@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="h-full">
   <head>
-    <title><%= content_for(:title) || "Darts Tournament" %></title>
+    <title><%= content_for(:title) || "DTM - Darts Tournament Manager" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Create and manage Darts Tournaments with double elimination brackets">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Darts Tournament">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,12 +21,25 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %> <!-- add "inter-font" later after "tailwind" if we want to use the Inter font -->
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+  <body class="h-full bg-gray-950 text-gray-100 antialiased">
+    <div class="min-h-full flex flex-col">
+      <!-- Header -->
+      <%= render "shared/header" %>
+
+      <!-- Flash Messages -->
+      <%= render "shared/flash_messages" %>
+
+      <!-- Main Content -->
+      <main class="flex-1">
+        <%= yield %>
+      </main>
+
+      <!-- Footer -->
+      <%= render "shared/footer" %>
+    </div>
   </body>
 </html>
