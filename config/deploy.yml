@@ -1,13 +1,13 @@
 # Name of your application. Used to uniquely configure containers.
-service: darts_tournament
+service: darts-tournament
 
 # Name of the container image (use your-user/app-name on external registries).
-image: darts_tournament
+image: lz0310/darts-tournament
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 178.128.199.154
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -20,14 +20,17 @@ servers:
 #
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
 #
-# proxy:
-#   ssl: true
-#   host: app.example.com
+proxy:
+  ssl: false
+  host: 178.128.199.154
 
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
+  server: registry.hub.docker.com
+  username: lz0310
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
   # Needed for authenticated registries.
   # username: your-user
@@ -40,10 +43,13 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - DATABASE_URL
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
+    RAILS_LOG_LEVEL: debug
+    RAILS_SERVE_STATIC_FILES: true
 
     # Set number of processes dedicated to Solid Queue (default: 1)
     # JOB_CONCURRENCY: 3
