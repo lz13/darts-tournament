@@ -19,5 +19,5 @@ Rails.application.routes.draw do
   get "t/:share_token", to: "tournaments#show", as: :public_tournament
 
   # Admin tournament view
-  get "t/:share_token/admin/:admin_token", to: "tournaments#admin:", as: :admin_tournament
+  get "t/:share_token/admin/:admin_token", to: "tournaments#admin", as: :admin_tournament
 end
