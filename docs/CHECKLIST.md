@@ -1,0 +1,153 @@
+## Implementation Checklist
+### Phase 1: Project Setup
+- [x] Create a new Rails 8 app with PostgreSQL, Tailwind, and Hotwire
+- [x] Add and configure RSpec with FactoryBot and Shoulda Matchers
+- [x] Configure a database (create development and test databases)
+- [x] Add .mise.toml for mise version management
+- [x] Set up a basic application layout with Tailwind (mobile-first)
+- [x] Add a styled home page with the "Create Tournament" button
+- [x] Verify Turbo/Stimulus are working (quick test)
+- [x] Verify setup: bin/dev runs, RSpec works, Stimulus loads
+### Phase 2: Core Models
+- [ ] Generate a Tournament model
+    - name (string, required)
+    - status (string, default: "draft")
+    - format (string, default: "double_elimination")
+    - share_token (string, unique)
+    - admin_token (string, unique)
+    - legs_to_win (integer, default: 3)
+    - seeding_method (string, default: "ordered")
+- [ ] Generate a Player model
+    - tournament_id (references)
+    - name (string, required)
+    - seed_number (integer)
+- [ ] Generate a Match model
+    - tournament_id (references)
+    - player1_id, player2_id, winner_id (references to players)
+    - player1_score, player2_score (integers)
+    - bracket_type (string: winners/losers/grand_final)
+    - round_number, position (integers)
+    - status (string, default: "pending")
+    - next_match_id, loser_next_match_id (self-references)
+- [ ] Add model associations and validations
+- [ ] Add secure token generation callbacks for Tournament
+- [ ] Add database indexes for foreign keys and tokens
+- [ ] Write model specs
+### Phase 3: Tournament Management
+- [ ] Generate Tournaments controller
+- [ ] Routes: root, /tournaments/new, /tournaments (POST)
+- [ ] Routes: /t/:share_token (public view)
+- [ ] Routes: /t/:share_token/admin/:admin_token (admin view)
+- [ ] New tournament form (name, legs_to_win, seeding_method dropdown)
+- [ ] Show action with share_token lookup
+- [ ] Admin shows action with both token verification
+- [ ] Player management (add/remove) in the admin view
+- [ ] Turbo Frames for a dynamic player list
+- [ ] Write request specs
+### Phase 4: Bracket Generation Service
+- [ ] Create app/services/bracket_generator.rb
+- [ ] Calculate bracket size (next power of 2)
+- [ ] Implement seeding strategies:
+    - ordered: seeds 1,2,3... in order added
+    - random: shuffle and assign seeds
+    - manual: use pre-assigned seed_number
+- [ ] Generate winner bracket matches
+    - Standard seeding matchups (1v8, 4v5, 2v7, 3v6 for 8 players)
+    - Link matches to the next round (next_match_id)
+- [ ] Generate loser bracket matches
+    - Losers drop from the winner bracket at correct rounds
+    - More rounds than the winner bracket
+    - Link matches appropriately
+- [ ] Generate grand final match
+- [ ] Handle byes (auto-advance higher seeds)
+- [ ] Write comprehensive service specs
+### Phase 5: Bracket Visualization
+- [ ] Create app/views/tournaments/_bracket.html.erb partial
+- [ ] Create app/views/matches/_match_card.html.erb partial
+- [ ] CSS layout with Tailwind:
+    - Flexbox/Grid for bracket structure
+    - Horizontal scroll container for mobile
+    - Round headers
+- [ ] Style match cards:
+    - Player names
+    - Scores (when completed)
+    - Status indicator (pending/ready/in_progress/completed)
+    - Winner highlight
+- [ ] Color coding:
+    - Winner bracket: emerald/green tones
+    - Loser bracket: amber/orange tones
+    - Grand final: yellow/gold accent
+- [ ] Bye display (show "BYE" for empty slots)
+- [ ] Responsive breakpoints
+### Phase 6: Match Scoring
+- [ ] Generate Matches controller (update action only)
+- [ ] Score entry form in match card (admin view only)
+- [ ] Stimulus controller for score validation:
+    - Both scores are required
+    - Winner must have exactly legs_to_win
+    - Loser must have less than legs_to_win
+    - No ties allowed
+- [ ] Match completion logic:
+    - Determine winner from scores
+    - Set winner_id and status = "completed"
+    - Advance winner to next_match (set as player1 or player2)
+    - Advance loser to loser_next_match (if it exists)
+    - Mark the next match as "ready" when both players set
+- [ ] Turbo Stream broadcasts for real-time updates
+- [ ] Write request and service specs
+### Phase 7: Tournament Flow & State Machine
+- [ ] Add a state machine to Tournament (draft → in_progress → completed)
+- [ ] "Start Tournament" button in the admin view
+- [ ] Start tournament validations:
+    - Minimum 2 players
+    - Players have names
+    - Manual seeding: all seeds are assigned and unique
+- [ ] Start tournament action:
+    - Apply seeding method
+    - Generate bracket
+    - Change status to in_progress
+    - Redirect to bracket view
+- [ ] Lock player changes when not in draft status
+- [ ] Tournament completion detection:
+    - Grand final has a winner
+    - Auto-update status to completed
+- [ ] Winner announcement display
+- [ ] Write integration/system specs
+### Phase 8: Polish & UX
+- [ ] Flash messages styling (success, error, info)
+- [ ] Turbo progress bar styling
+- [ ] Loading states for form submissions
+- [ ] Empty states:
+    - Home: "No tournaments yet"
+    - Tournament: "Add players to get started"
+- [ ] Error pages (404, 500) with Tailwind styling
+- [ ] Share button with clipboard copy (Stimulus)
+- [ ] Mobile optimizations:
+    - Large touch targets for buttons
+    - Score input with a number keyboard
+    - Sticky tournament header
+- [ ] Favicon (simple dart icon or DTM letters)
+- [ ] Basic meta tags for social sharing
+### Phase 9: Deployment
+- [ ] Review and secure production config
+- [ ] Configure production database URL
+- [ ] Set up RAILS_MASTER_KEY handling
+- [ ] Create Dockerfile
+- [ ] Create fly.toml or render.yaml
+- [ ] Deploy to a hosting platform
+- [ ] Verify production works
+- [ ] Update README with live URL
+---
+## Future Enhancements (Post-MVP)
+- [ ] User accounts and authentication
+- [ ] Player profiles and statistics tracking
+- [ ] Single elimination and round-robin formats
+- [ ] Bracket reset in grand final (true double elimination)
+- [ ] Live leg-by-leg scoring (301/501 with checkout tracking)
+- [ ] Tournament history and archives
+- [ ] Printable bracket view (PDF export)
+- [ ] Tournament templates (save and reuse player lists)
+- [ ] Real-time spectator updates via ActionCable
+- [ ] Tournament scheduling (set match times)
+- [ ] Multiple legs/sets format options
+---
