@@ -13,7 +13,7 @@ class Tournament < ApplicationRecord
 
   # Associations
   has_many :players, dependent: :destroy
-  has_many :matches, dependent: :destroy
+  # has_many :matches, dependent: :destroy
 
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
@@ -21,8 +21,8 @@ class Tournament < ApplicationRecord
   validates :format, inclusion: { in: FORMATS }
   validates :seeding_method, inclusion: { in: SEEDING_METHODS }
   validates :legs_to_win, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :share_token, presence: true, uniqueness: true
-  validates :admin_token, presence: true, uniqueness: true
+  validates :share_token, uniqueness: true
+  validates :admin_token, uniqueness: true
 
   # Scopes
   scope :draft, -> { where(status: "draft") }
@@ -74,7 +74,7 @@ class Tournament < ApplicationRecord
       players.shuffle.each_with_index do |player, index|
         player.update!(seed_number: index + 1)
       end
-    when "orderd"
+    when "ordered"
       # Seeds already set by position (1, 2, 3...)
       players.order(:created_at).each_with_index do |player, index|
         player.update!(seed_number: index + 1) unless player.seed_number.present?

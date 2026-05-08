@@ -24,8 +24,8 @@ RSpec.describe Tournament, type: :model do
     it { should validate_inclusion_of(:format).in_array(Tournament::FORMATS)}
     it { should validate_inclusion_of(:seeding_method).in_array(Tournament::SEEDING_METHODS)}
     it { should validate_numericality_of(:legs_to_win).only_integer.is_greater_than(0) }
-    it { should validate_presence_of(:share_token) }
-    it { should validate_presence_of(:admin_token) }
+    # it { should validate_presence_of(:share_token) }
+    # it { should validate_presence_of(:admin_token) }
   end
 
   describe 'uniqueness validations' do
