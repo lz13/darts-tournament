@@ -1,5 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "pages/home.html.tailwindcss", type: :view do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe "pages/home", type: :view do
+  it "renders the home page" do
+    render
+    expect(rendered).to have_selector("h1", text: "Darts Tournament")
+  end
 end
