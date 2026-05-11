@@ -2,7 +2,7 @@
 
 ## Overview
 
-DTM Uses PostgreSQL with environment-based connection URLs. This approach allows the same Rails applciation to connnect to different databases based on the deployment environment.
+DTM Uses PostgreSQL with environment-based connection URLs. This approach allows the same Rails application to connect to different databases based on the deployment environment.
 
 ## Current Setup
 
@@ -37,11 +37,11 @@ apt install postgresql postgresql-contrib
 sudo -u postgres psql -c "CREATE USER darts_tournament WITH PASSWORD 'PASSWORD';"
 
 # 3. Create database
-sudo -u postgres psql -c "CREATE DATABASE darts_tournament_staging OWNWER darts_tournament;"
+sudo -u postgres psql -c "CREATE DATABASE darts_tournament_staging OWNER darts_tournament;"
 
 # 4. Configure pg_hba.conf to accept Docker connections
-echo "host all all 127.17.0.0/16 md5" | sudo tee -a /etc/postgresql/16/main/pg_hba.conf
-echo "host all all 127.18.0.0/16 md5" | sudo tee -a /etc/postgresql/16/main/pg_hba.conf
+echo "host all all 172.17.0.0/16 md5" | sudo tee -a /etc/postgresql/16/main/pg_hba.conf
+echo "host all all 172.18.0.0/16 md5" | sudo tee -a /etc/postgresql/16/main/pg_hba.conf
 
 # 5. Set listen addresses to '*' in postgresql.conf
 
@@ -64,13 +64,13 @@ ufw reload
 
 - SOLID_QUEUE_IN_PUMA: false (disabled due to startup issues)
 - RUN_DB_PREPARE: false (prevents health check timeouts)
-- Environment secrets stored in `.kama/secrets.yml` (gitignored)
+- Environment secrets stored in `.kamal/secrets.yml` (gitignored)
 
 #### Running Migrations
 Since `kamal app exec` has issues with DATABASE_URL, use docker exec:
 
 ```bash
-ssh root@a178.128.199.154
+ssh root@178.128.199.154
 docker ps (to find container ID)
 docker exec -it CONTAINER_ID bin/rails db:migrate (to run migrations)
 ```
@@ -104,7 +104,7 @@ When adding a production environment:
 
 #### Database Migration
 1. Create `darts_tournament_production` database
-2. Run migrations: `kamal app ecex "bin/rails db:migrate"`
+2. Run migrations: `kamal app exec "bin/rails db:migrate"`
 3. Production starts with empty database (no data migration from staging)
 
 #### Environment Variables
@@ -115,7 +115,7 @@ production:
   DATABASE_URL: postgres://darts_tournament:PASSWORD@PROD_IP:5432/darts_tournament_production
 ```
 ---
-### Troubleshootinh
+### Troubleshooting
 
 #### Connection via Unix Socket
 If Rails tries to connect via socket instead of TCP/IP:
