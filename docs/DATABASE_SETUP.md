@@ -12,14 +12,31 @@ DTM Uses PostgreSQL with environment-based connection URLs. This approach allows
 - **Connection**: TCP/IP via Docker network
 - **Rails Environment**: `production` (with staging DATABASE_URL)
 ---
-### Connection Method
+### Multi-Database Configuration
+DTM uses Rails 8's multi-database setup with fallback URLs:
 ```yaml
-# config/database.yml
 production:
   primary:
-    <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
+    url: <%= ENV["DATABASE_URL"] %>
+  cache:
+    url: <%= ENV["CACHE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
+  queue:
+    url: <%= ENV["QUEUE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
+  cable:
+    url: <%= ENV["CABLE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
 ```
+
+#### Staging Setup (Current)
+All databases fallback to DATABASE_URL pointing to darts_tournament_staging:
+- Primary, Cache, Queue, and Cable tables coexist in one database
+- Simpler management for staging/testing
+
+####  Production Setup (Future)
+  Create separate databases and set individual URLs:
+- DATABASE_URL → darts_tournament_production
+- CACHE_DATABASE_URL → darts_tournament_production_cache
+- QUEUE_DATABASE_URL → darts_tournament_production_queue
+- CABLE_DATABASE_URL → darts_tournament_production_cable
 ---
 ### Environment Variables
 ```
@@ -67,29 +84,23 @@ ufw reload
 - Environment secrets stored in `.kamal/secrets.yml` (gitignored)
 
 #### Running Migrations
-Since `kamal app exec` has issues with DATABASE_URL, use docker exec:
-
+Migrations run for all databases automatically:
 ```bash
-ssh root@178.128.199.154
-docker ps (to find container ID)
-docker exec -it CONTAINER_ID bin/rails db:migrate (to run migrations)
+# This migrates primary, cache, queue, and cable
+ssh root@178.128.199.154 "docker exec \$(docker ps -q | grep darts-tournament-web | head -1) bin/rails db:migrate"
 ```
-
-#### Why Disabled
-Solid Queue was causing Puma ot crash during startup because:
-1. It tried to boot before database was accessible
-2. Created a circular dependency (needs DB to boot, but DB needs App to be healthy)
-3. The `SOLID_QUEUE_IN_PUMA=true` env var always evaluated to be truthy in Ruby
-
-#### Fix Applied
-- Modified `config/puma.rb` to checl `ENV["SOLID_QUEUE_IN_PUMA"] == "true"`
-- Set `SOLID_QUEUE_IN_PUMA: false` in `deploy.yml`
-
-#### Future Re-enable
-When background jobs are needed:
-1. Create Solid Queue database tables via migration
-2. Run Solid Queue as a separate Kamal accessory / service
-3. Or fix the root cause and re-enable in Puma
+Or migrate specific databases:
+```bash
+bin/rails db:migrate:primary
+bin/rails db:migrate:cache
+bin/rails db:migrate:queue
+bin/rails db:migrate:cable
+```
+#### Solid Queue Configuration
+Solid Queue runs inside Puma via the solid_queue plugin:
+- Enabled when SOLID_QUEUE_IN_PUMA=true (default)
+- Puma config: plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
+- Database tables created via rails db:migrate (queue migrations)
 ---
 ### Future Production Setup
 
