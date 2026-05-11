@@ -4,10 +4,10 @@
 rm -f /rails/tmp/pids/server.pid
 
 # Only run db:prepare if explicitly enabled (for first-time setup)
-if [ "${RAILS_ENV}" = "production" ] && [ "${RUN_DB_PREPARE}" = "true" ]; then
-  echo "Running database preparation..."
+if [ "${RAILS_ENV}" = "production" ]; then
   ./bin/rails db:prepare
 fi
+
 
 # Execute the CMD
 exec "$@"
