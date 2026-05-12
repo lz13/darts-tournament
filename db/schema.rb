@@ -32,7 +32,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_114623) do
     t.index ["loser_next_match_id"], name: "index_matches_on_loser_next_match_id"
     t.index ["player_one_id"], name: "index_matches_on_player_one_id"
     t.index ["player_two_id"], name: "index_matches_on_player_two_id"
-    t.index ["tournament_id", "bracket_type", "round_number", "position"], name: "index_metches_on_tournament_bracket_round_position", unique: true
+    t.index ["tournament_id", "bracket_type", "round_number", "position"], name: "index_matches_on_tournament_bracket_round_position", unique: true
     t.index ["tournament_id"], name: "index_matches_on_tournament_id"
     t.index ["winner_id"], name: "index_matches_on_winner_id"
     t.index ["winner_next_match_id"], name: "index_matches_on_winner_next_match_id"

@@ -18,6 +18,6 @@ class CreateMatches < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :matches, [ :tournament_id, :bracket_type, :round_number, :position ], unique: true, name: "index_metches_on_tournament_bracket_round_position"
+    add_index :matches, [ :tournament_id, :bracket_type, :round_number, :position ], unique: true, name: "index_matches_on_tournament_bracket_round_position"
   end
 end

@@ -1,6 +1,6 @@
 class Match < ApplicationRecord
   BRACKET_TYPES = %w[unassigned winners losers grand_final].freeze
-  STATUSES = %w[pending ready in_progress completed]
+  STATUSES = %w[pending ready in_progress completed].freeze
 
   belongs_to :tournament
   belongs_to :player_one, class_name: "Player", optional: true
