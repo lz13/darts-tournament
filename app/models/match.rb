@@ -19,6 +19,14 @@ class Match < ApplicationRecord
   scope :grand_final, -> { where(bracket_type: "grand_final") }
   scope :completed, -> { where(status: "completed") }
 
+  def ready?
+    status == "ready"
+  end
+
+  def in_progress?
+    status == "in_progress"
+  end
+
   def completed?
     status == "completed"
   end
@@ -27,7 +35,7 @@ class Match < ApplicationRecord
     player_one.nil? || player_two.nil?
   end
 
-  def ready?
+  def players_assigned?
     player_one.present? && player_two.present?
   end
 end

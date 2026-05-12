@@ -8,15 +8,15 @@ FactoryBot.define do
 
     trait :ready do
       status { "ready" }
-      association :player_one, factory: :player, tournament: tournament
-      association :player_two, factory: :player, tournament: tournament
+      player_one { association(:player, tournament: tournament) }
+      player_two { association(:player, tournament: tournament) }
     end
 
     trait :completed do
       status { "completed" }
-      association :player_one, factory: :player, tournament: tournament
-      association :player_two, factory: :player, tournament: tournament
-      association :winner, factory: :player, tournament: tournament
+      player_one { association(:player, tournament: tournament) }
+      player_two { association(:player, tournament: tournament) }
+      winner { player_one }
       player_one_score { 2 }
       player_two_score { 1 }
     end
