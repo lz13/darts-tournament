@@ -13,7 +13,7 @@ class Tournament < ApplicationRecord
 
   # Associations
   has_many :players, dependent: :destroy
-  # has_many :matches, dependent: :destroy
+  has_many :matches, dependent: :destroy
 
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
