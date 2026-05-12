@@ -12,8 +12,8 @@ class CreateMatches < ActiveRecord::Migration[8.1]
       t.integer :position, null: false
       t.string :status, null: false, default: "pending"
 
-      t.references :winner_next_match, type: :uuid, null: true,  foreign_key: {  to_table: :matches}
-      t.references :loser_next_match, type: :uuid, null: true, foreign_key: { to_table: :matches}
+      t.references :winner_next_match, type: :uuid, null: true,  foreign_key: {  to_table: :matches }
+      t.references :loser_next_match, type: :uuid, null: true, foreign_key: { to_table: :matches }
 
       t.timestamps
     end

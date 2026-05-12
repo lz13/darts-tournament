@@ -21,7 +21,7 @@
     - tournament_id (references)
     - name (string, required)
     - seed_number (integer)
-- [ ] Generate a Match model
+- [x] Generate a Match model
     - tournament_id (references)
     - player1_id, player2_id, winner_id (references to players)
     - player1_score, player2_score (integers)
