@@ -34,16 +34,16 @@
 - [x] Add database indexes for foreign keys and tokens
 - [x] Write model specs
 ### Phase 3: Tournament Management
-- [ ] Generate Tournaments controller
-- [ ] Routes: root, /tournaments/new, /tournaments (POST)
-- [ ] Routes: /t/:share_token (public view)
-- [ ] Routes: /t/:share_token/admin/:admin_token (admin view)
-- [ ] New tournament form (name, legs_to_win, seeding_method dropdown)
-- [ ] Show action with share_token lookup
-- [ ] Admin shows action with both token verification
-- [ ] Player management (add/remove) in the admin view
-- [ ] Turbo Frames for a dynamic player list
-- [ ] Write request specs
+- [x] Generate Tournaments controller
+- [x] Routes: root, /tournaments/new, /tournaments (POST)
+- [x] Routes: /t/:share_token (public view)
+- [x] Routes: /t/:share_token/admin/:admin_token (admin view)
+- [x] New tournament form (name, legs_to_win, seeding_method dropdown)
+- [x] Show action with share_token lookup
+- [x] Admin shows action with both token verification
+- [x] Player management (add/remove) in the admin view
+- [x] Turbo Frames for a dynamic player list
+- [x] Write request specs
 ### Phase 4: Bracket Generation Service
 - [ ] Create app/services/bracket_generator.rb
 - [ ] Calculate bracket size (next power of 2)
