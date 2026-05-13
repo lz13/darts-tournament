@@ -13,6 +13,7 @@
 ActiveRecord::Schema[8.1].define(version: 2026_05_11_114623) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pgcrypto"
 
   create_table "matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "bracket_type", default: "unassigned", null: false
