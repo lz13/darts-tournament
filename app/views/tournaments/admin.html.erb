@@ -1,0 +1,104 @@
+<div class="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+  <div class="mb-8">
+    <div class="flex items-center gap-r mb-4">
+      <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+        <%= @tournament.status.titleize %>
+      </span>
+    </div>
+
+    <h1 class="text-4xl font-bold text-white"><%= @tournament.name %></h1>
+    <p class="mt-2 text-gray-400"><%= @tournament.legs_to_win %> legs to win - <%= @tournament.seeding_method.titleize %> seeding</p>
+  </div>
+
+  <!-- Share Link -->
+  <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8">
+    <h2 class="text-lg font-semibold text-white mb-3">Share Link</h2>
+
+    <!-- Desktop: show URL + copy button -->
+    <div class="hidden sm:flex items-center gap-3">
+      <code class="flex-1 rounded-lg bg-gray-800 px-4 py-3 text-sm text-emerald-400 font-mono truncate">
+        <%= public_tournament_url(@tournament.share_token) %>
+      </code>
+      <button
+        class="rounded-lg bg-gray-800 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700 transition-colors shrink-0"
+        onclick="navigator.clipboard.writeText('<%= public_tournament_url(@tournament.share_token) %>')">
+        Copy
+      </button>
+    </div>
+
+    <!-- Mobile: just a copy button -->
+    <div class="sm:hidden">
+      <button
+        class="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2"
+        onclick="navigator.clipboard.writeText('<%= public_tournament_url(@tournament.share_token) %>'); this.textContent = 'Copied!'">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+        </svg>
+        Copy Share Link
+      </button>
+    </div>
+  </div>
+
+  <!-- Player Management -->
+  <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-semibold text-white">Players</h2>
+      <span class="text-gray-500 text-sm" id="players_count"><%= @tournament.players.count %></span>
+    </div>
+
+    <%= turbo_frame_tag "players_list" do %>
+      <div id="players" class="space-y-2 mb-6">
+        <% if @tournament.players.any? %>
+          <%= render partial: "players/player", collection: @tournament.players, as: :player %>
+        <% else %>
+          <p id="no_players" class="text-gray-500 text-center py-8">No players added yet. Add your first player below.</p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @tournament.draft? %>
+      <%= turbo_frame_tag "new_player_form" do %>
+        <%= render "players/form", tournament: @tournament, player: Player.new %>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <!-- Start Tournament -->
+  <% if @tournament.draft? %>
+    <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-white">Ready to Start?</h2>
+          <p class="text-gray-500 text-sm mt-1">
+            <% if @tournament.players.count < 2 %>
+              Add at least 2 players to start the tournament.
+            <% else %>
+              Once started, players cannot be added or removed.
+            <% end %>
+          </p>
+        </div>
+
+        <%= button_to "Start Tournament", start_tournament_path(@tournament.share_token, @tournament.admin_token), method: :post, class: "rounded-lg px-6 py-3 text-lg font-semibold shadow-sm transition-all hover:scale-105 #{@tournament.players.count >= 2 ? 'bg-emerald-600 text-white hover:bg-emerald-500 cursor-pointer' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}", disabled: @tournament.players.count < 2 %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @tournament.in_progress? || @tournament.completed? %>
+    <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-white">Tournament Bracket</h2>
+          <p class="text-gray-500 text-sm mt-1">View the full tournament bracket and match results.</p>
+        </div>
+
+        <%= link_to "#", class: "rounded-lg bg-emerald-600 px-6 py-3 text-lg font-semibold text-white shadow-sm hover:bg-emerald-500 transition-all hover:scale-105" do %>
+          View Bracket
+          <svg class="inline-block ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,40 @@
+<div class="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+        <%= @tournament.status.titleize %>
+      </span>
+      <span class="text-gray-500 text-sm"><%= @tournament.legs_to_win %> legs to win</span>
+    </div>
+
+    <h1 class="text-4xl font-bold text-white"><%= @tournament.name %></h1>
+    <p class="mt-2 text-gray-400">Seeding: <%= @tournament.seeding_method.titleize %></p>
+  </div>
+
+  <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8">
+    <h2 class="text-xl font-semibold text-white mb-4">Players</h2>
+
+    <% if @tournament.players.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <% @tournament.players.each_with_index do |player, index| %>
+          <div class="flex items-center gap-3 rounded-lg bg-gray-800 px-4 py-3">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-sm font-medium text-emerald-400">
+              <%= index + 1 %>
+            </span>
+            <span class="text-white font-medium"><%= player.name %></span>
+          </div>
+        <% end %>
+      </div>
+      <% else %>
+        <p class="text-gray-500 text-center py-8">No players added yet.</p>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <%= link_to "<- Back to Home", root_path, class: "text-gray-400 hover:text-white transition-colors" %>
+
+    <%= link_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), class: "rounded-lg bg-gray-800 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700 transition-colors" do %>
+      Manage Tournament
+    <% end %>
+  </div>
+</div>
