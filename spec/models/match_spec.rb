@@ -17,8 +17,8 @@ RSpec.describe Match, type: :model do
     it { should belong_to(:winner_next_match).class_name('Match').optional }
     it { should belong_to(:loser_next_match).class_name('Match').optional }
   end
-  describe 'scopes' do
 
+  describe 'scopes' do
     let!(:winners_match) { create(:match, bracket_type: 'winners') }
     let!(:losers_match) { create(:match, bracket_type: 'losers') }
     let!(:grand_final) { create(:match, bracket_type: 'grand_final') }
@@ -27,7 +27,7 @@ RSpec.describe Match, type: :model do
       expect(Match.winners_bracket).to include(winners_match)
       expect(Match.winners_bracket).not_to include(losers_match, grand_final)
     end
-end
+  end
 
   describe '#ready?' do
     it 'returns true when status is ready' do
