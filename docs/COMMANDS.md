@@ -19,6 +19,12 @@ bin/rails routes
 # Run all tests
 bundle exec rspec
 
+# Run system tests (requires Chrome/Chromium)
+bundle exec rspec spec/system
+
+# Run all tests except system tests
+bundle exec rspec --exclude-pattern "spec/system/**/*_spec.rb"
+
 # Run specific test file
 bundle exec rspec spec/models/tournament_spec.rb
 
