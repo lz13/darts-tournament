@@ -20,7 +20,7 @@ RSpec.describe "Home Page", type: :system do
   it "stimulus controller responds to user interaction", js: true do
     visit root_path
 
-    fill_in class: "rounded-lg", with: "World", match: :first
+    find("input.rounded-lg", match: :first).set("World")
     click_button "Test Stimulus"
 
     expect(page).to have_content("Hello, World! Stimulus is working.")
