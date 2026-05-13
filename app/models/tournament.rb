@@ -80,8 +80,12 @@ class Tournament < ApplicationRecord
         player.update!(seed_number: index + 1) unless player.seed_number.present?
       end
     when "manual"
-      # Seeds already manually assigned, validate they're all set
-      raise "Not all players have seeds assigned" if players.any? { |p| p.seed_number.blank? }
+      # Auto-assign seeds if not manually set (placeholder until manual UI added)
+      if players.any? { |p| p.seed_number.blank? }
+        players.order(:created_at).each_with_index do |player, index|
+          player.update!(seed_number: index + 1) if player.seed_number.blank?
+        end
+      end
     end
   end
 

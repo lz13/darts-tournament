@@ -1,10 +1,13 @@
 class TournamentsController < ApplicationController
+  before_action :set_tournament_by_share_token, only: %i[show]
+  before_action :set_tournament_by_share_token_and_verify_admin, only: %i[admin start]
+
   def index
-    # Placeholder
+    @tournaments = Tournament.order(created_at: :desc)
   end
 
   def new
-    # Placeholder
+    @tournament = Tournament.new
   end
 
   def show
@@ -12,7 +15,13 @@ class TournamentsController < ApplicationController
   end
 
   def create
-    # Placeholder
+    @tournament = Tournament.new(tournament_params)
+
+    if @tournament.save
+      redirect_to public_tournament_path(@tournament.share_token), notice: "Tournament created successfully!"
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update
@@ -29,5 +38,28 @@ class TournamentsController < ApplicationController
 
   def admin
     # Placeholder
+  end
+
+  def start
+    if @tournament.start!
+      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), notice: "Tournament started! Bracket will be generated in the next phase."
+    else
+      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), alert: "Failed to start tournament. Please ensure there are enough players and try again."
+    end
+  end
+
+  private
+
+  def tournament_params
+    params.require(:tournament).permit(:name, :legs_to_win, :seeding_method)
+  end
+
+  def set_tournament_by_share_token
+    @tournament = Tournament.find_by!(share_token: params[:share_token])
+  end
+
+  def set_tournament_by_share_token_and_verify_admin
+    @tournament = Tournament.find_by!(share_token: params[:share_token])
+    raise ActiveRecord::RecordNotFound unless @tournament.admin_token == params[:admin_token]
   end
 end
