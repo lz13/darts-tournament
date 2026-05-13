@@ -9,7 +9,7 @@
 - [x] Verify Turbo/Stimulus are working (quick test)
 - [x] Verify setup: bin/dev runs, RSpec works, Stimulus loads
 ### Phase 2: Core Models
-- [ ] Generate a Tournament model
+- [x] Generate a Tournament model
     - name (string, required)
     - status (string, default: "draft")
     - format (string, default: "double_elimination")
@@ -17,11 +17,11 @@
     - admin_token (string, unique)
     - legs_to_win (integer, default: 3)
     - seeding_method (string, default: "ordered")
-- [ ] Generate a Player model
+- [x] Generate a Player model
     - tournament_id (references)
     - name (string, required)
     - seed_number (integer)
-- [ ] Generate a Match model
+- [x] Generate a Match model
     - tournament_id (references)
     - player1_id, player2_id, winner_id (references to players)
     - player1_score, player2_score (integers)
@@ -29,10 +29,10 @@
     - round_number, position (integers)
     - status (string, default: "pending")
     - next_match_id, loser_next_match_id (self-references)
-- [ ] Add model associations and validations
-- [ ] Add secure token generation callbacks for Tournament
-- [ ] Add database indexes for foreign keys and tokens
-- [ ] Write model specs
+- [x] Add model associations and validations
+- [x] Add secure token generation callbacks for Tournament
+- [x] Add database indexes for foreign keys and tokens
+- [x] Write model specs
 ### Phase 3: Tournament Management
 - [ ] Generate Tournaments controller
 - [ ] Routes: root, /tournaments/new, /tournaments (POST)
