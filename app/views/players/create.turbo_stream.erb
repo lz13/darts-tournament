@@ -8,7 +8,7 @@
   <%= turbo_stream.remove "no_players" %>
 
   <%= turbo_stream.update "players_count" do %>
-    <%= @tournament.players.count %>
+    <%= @tournament.players_count %>
   <% end %>
 <% else %>
   <%= turbo_stream.replace "new_player_form", partial: "players/form", locals: { tournament: @tournament, player: @player } %>
