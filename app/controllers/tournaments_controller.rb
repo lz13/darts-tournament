@@ -46,7 +46,7 @@ class TournamentsController < ApplicationController
     if @tournament.start!
       redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), notice: "Tournament started! Bracket will be generated in the next phase."
     else
-      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), alert: "Failed to start tournament. Please ensure there are enough players and try again."
+      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), alert: "Failed to start tournament!"
     end
   end
 
