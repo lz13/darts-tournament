@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_114623) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_14_052417) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -55,6 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_114623) do
     t.string "format", default: "double_elimination", null: false
     t.integer "legs_to_win", default: 3, null: false
     t.string "name", null: false
+    t.integer "players_count", default: 0, null: false
     t.string "seeding_method", default: "ordered", null: false
     t.string "share_token", null: false
     t.string "status", default: "draft", null: false
