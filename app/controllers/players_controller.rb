@@ -1,4 +1,6 @@
 class PlayersController < ApplicationController
+  include AdminTokenVerifiable
+
   before_action :set_tournament_and_verify_admin
 
   def create
@@ -39,6 +41,6 @@ class PlayersController < ApplicationController
 
   def set_tournament_and_verify_admin
     @tournament = Tournament.find_by!(share_token: params[:share_token])
-    raise ActiveRecord::RecordNotFound unless @tournament.admin_token == params[:admin_token]
+    raise ActiveRecord::RecordNotFound unless valid_admin_token?(params[:admin_token])
   end
 end
