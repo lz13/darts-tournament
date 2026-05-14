@@ -13,7 +13,7 @@
           <%= pluralize(@tournament.errors.count, "error") %> prohibited this tournament from being saved:
         </h2>
         <ul class="text-red-300 text-sm list-disc list-inside">
-          <% @tournament.errors.full_messages.each do |message| %> %>
+          <% @tournament.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>

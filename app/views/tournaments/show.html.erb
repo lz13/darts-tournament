@@ -33,6 +33,7 @@
   <div class="flex items-center justify-between">
     <%= link_to "<- Back to Home", root_path, class: "text-gray-400 hover:text-white transition-colors" %>
 
+    <!-- TODO: this should be removed later, as only admin should be available to manage the tournament -->
     <%= link_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), class: "rounded-lg bg-gray-800 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700 transition-colors" do %>
       Manage Tournament
     <% end %>
