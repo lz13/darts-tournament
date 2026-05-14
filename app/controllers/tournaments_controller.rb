@@ -43,8 +43,13 @@ class TournamentsController < ApplicationController
   end
 
   def start
+    manual_seeds_auto_assigned = @tournament.seeding_method == "manual" && @tournament.players.any? { |p| p.seed_number.blank? }
+
     if @tournament.start!
-      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), notice: "Tournament started! Bracket will be generated in the next phase."
+      notice_message = "Tournament started! Bracket will be generated in the next phase."
+      notice_message += " Note: Manual seeding was selected but no seeds were assigned. Players were seeded in order." if manual_seeds_auto_assigned
+
+      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), notice: notice_message
     else
       redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token), alert: "Failed to start tournament!"
     end
