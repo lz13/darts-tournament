@@ -11,7 +11,7 @@
   </div>
 
   <!-- Share Link -->
-  <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8">
+  <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8" data-controller="clipboard" data-clipboard-text-value="<%= public_tournament_url(@tournament.share_token) %>">
     <h2 class="text-lg font-semibold text-white mb-3">Share Link</h2>
 
     <!-- Desktop: show URL + copy button -->
@@ -19,18 +19,14 @@
       <code class="flex-1 rounded-lg bg-gray-800 px-4 py-3 text-sm text-emerald-400 font-mono truncate">
         <%= public_tournament_url(@tournament.share_token) %>
       </code>
-      <button
-        class="rounded-lg bg-gray-800 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700 transition-colors shrink-0"
-        onclick="navigator.clipboard.writeText('<%= public_tournament_url(@tournament.share_token) %>')">
+      <button class="rounded-lg bg-gray-800 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-700 transition-colors shrink-0" data-clipboard-target="button" data-action="click->clipboard#copy">
         Copy
       </button>
     </div>
 
     <!-- Mobile: just a copy button -->
     <div class="sm:hidden">
-      <button
-        class="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2"
-        onclick="navigator.clipboard.writeText('<%= public_tournament_url(@tournament.share_token) %>'); this.textContent = 'Copied!'">
+      <button class="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2" data-clipoard-target="button" data-action="click->clipboard#copy">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
         </svg>
@@ -43,7 +39,7 @@
   <div class="rounded-2xl bg-gray-900 p-6 ring-1 ring-gray-800 mb-8">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl font-semibold text-white">Players</h2>
-      <span class="text-gray-500 text-sm" id="players_count"><%= @tournament.players.count %></span>
+      <span class="text-gray-500 text-sm" id="players_count"><%= @tournament.players_count %></span>
     </div>
 
     <%= turbo_frame_tag "players_list" do %>
@@ -71,7 +67,7 @@
         <div>
           <h2 class="text-lg font-semibold text-white">Ready to Start?</h2>
           <p class="text-gray-500 text-sm mt-1">
-            <% if @tournament.players.count < 2 %>
+            <% if @tournament.players_count < 2 %>
               Add at least 2 players to start the tournament.
             <% else %>
               Once started, players cannot be added or removed.
@@ -79,7 +75,7 @@
           </p>
         </div>
 
-        <%= button_to "Start Tournament", start_tournament_path(@tournament.share_token, @tournament.admin_token), method: :post, class: "rounded-lg px-6 py-3 text-lg font-semibold shadow-sm transition-all hover:scale-105 #{@tournament.players.count >= 2 ? 'bg-emerald-600 text-white hover:bg-emerald-500 cursor-pointer' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}", disabled: @tournament.players.count < 2 %>
+        <%= button_to "Start Tournament", start_tournament_path(@tournament.share_token, @tournament.admin_token), method: :post, class: "rounded-lg px-6 py-3 text-lg font-semibold shadow-sm transition-all hover:scale-105 #{@tournament.players_count >= 2 ? 'bg-emerald-600 text-white hover:bg-emerald-500 cursor-pointer' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}", disabled: @tournament.players.count < 2 %>
       </div>
     </div>
   <% end %>
