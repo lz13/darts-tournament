@@ -2,6 +2,7 @@ class PlayersController < ApplicationController
   include AdminTokenVerifiable
 
   before_action :set_tournament_and_verify_admin
+  before_action :verify_tournament_is_draft, only: %i[create destroy]
 
   def create
     @player = @tournament.players.build(player_params)
@@ -42,5 +43,16 @@ class PlayersController < ApplicationController
   def set_tournament_and_verify_admin
     @tournament = Tournament.find_by!(share_token: params[:share_token])
     raise ActiveRecord::RecordNotFound unless valid_admin_token?(params[:admin_token])
+  end
+
+  def verify_tournament_is_draft
+    return if @tournament.draft?
+
+    if request.format.html?
+      redirect_to admin_tournament_path(@tournament.share_token, @tournament.admin_token),
+                  alert: "Cannot modify players after tournament has started."
+    else
+      head :unprocessable_entity
+    end
   end
 end

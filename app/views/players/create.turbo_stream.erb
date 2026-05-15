@@ -7,6 +7,7 @@
 
   <%= turbo_stream.remove "no_players" %>
 
+  <% @tournament.reload %>
   <%= turbo_stream.update "players_count" do %>
     <%= @tournament.players_count %>
   <% end %>
