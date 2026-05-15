@@ -59,15 +59,6 @@ class Tournament < ApplicationRecord
     update!(status: "completed")
   end
 
-  private
-
-  def set_defaults
-    self.status ||= "draft"
-    self.format ||= "double_elimination"
-    self.legs_to_win ||= 3
-    self.seeding_method ||= "ordered"
-  end
-
   def apply_seeding!
     case seeding_method
     when "random"
@@ -89,9 +80,16 @@ class Tournament < ApplicationRecord
     end
   end
 
+  private
+
+  def set_defaults
+    self.status ||= "draft"
+    self.format ||= "double_elimination"
+    self.legs_to_win ||= 3
+    self.seeding_method ||= "ordered"
+  end
+
   def generate_bracket!
-    # This will be implemented in Phase 4 (BracketGenerator service)
-    # For now just placeholder
-    true
+    BracketGenerator.new(self).generate!
   end
 end

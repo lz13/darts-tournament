@@ -45,22 +45,22 @@
 - [x] Turbo Frames for a dynamic player list
 - [x] Write request specs
 ### Phase 4: Bracket Generation Service
-- [ ] Create app/services/bracket_generator.rb
-- [ ] Calculate bracket size (next power of 2)
-- [ ] Implement seeding strategies:
+- [x] Create app/services/bracket_generator.rb
+- [x] Calculate bracket size (next power of 2)
+- [x] Implement seeding strategies:
     - ordered: seeds 1,2,3... in order added
     - random: shuffle and assign seeds
     - manual: use pre-assigned seed_number
-- [ ] Generate winner bracket matches
+- [x] Generate winner bracket matches
     - Standard seeding matchups (1v8, 4v5, 2v7, 3v6 for 8 players)
     - Link matches to the next round (next_match_id)
-- [ ] Generate loser bracket matches
+- [x] Generate loser bracket matches
     - Losers drop from the winner bracket at correct rounds
     - More rounds than the winner bracket
     - Link matches appropriately
-- [ ] Generate grand final match
-- [ ] Handle byes (auto-advance higher seeds)
-- [ ] Write comprehensive service specs
+- [x] Generate grand final match
+- [x] Handle byes (auto-advance higher seeds)
+- [x] Write comprehensive service specs
 ### Phase 5: Bracket Visualization
 - [ ] Create app/views/tournaments/_bracket.html.erb partial
 - [ ] Create app/views/matches/_match_card.html.erb partial
