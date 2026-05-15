@@ -7,11 +7,13 @@
 
   <%= turbo_stream.remove "no_players" %>
 
+  <% tournament = @tournament.reload %>
+
   <%= turbo_stream.update "players_count" do %>
-    <%= @tournament.reload.players_count %>
+    <%= tournament.players_count %>
   <% end %>
 
-  <%= turbo_stream.update "start_tournament_section", partial: "tournaments/start_tournament", locals: { tournament: @tournament.reload } %>
+  <%= turbo_stream.update "start_tournament_section", partial: "tournaments/start_tournament", locals: { tournament: tournament } %>
 
 <% else %>
   <%= turbo_stream.replace "new_player_form", partial: "players/form", locals: { tournament: @tournament, player: @player } %>

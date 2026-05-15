@@ -12,7 +12,7 @@
         </p>
       </div>
 
-      <%= button_to "start Tournament", start_tournament_path(tournament.share_token, tournament.admin_token), method: :post, class: "rounded-lg px-6 py-3 text-lg font-semibold shadow-sm transition-all hover:scale-105 #{tournament.players_count >= 2 ? 'bg-emerald-600 text-white hover:bg-emerald-500 cursor-pointer' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}", disabled: tournament.players_count < 2 %>
+      <%= button_to "Start Tournament", start_tournament_path(tournament.share_token, tournament.admin_token), method: :post, class: "rounded-lg px-6 py-3 text-lg font-semibold shadow-sm transition-all hover:scale-105 #{tournament.players_count >= 2 ? 'bg-emerald-600 text-white hover:bg-emerald-500 cursor-pointer' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}", disabled: tournament.players_count < 2 %>
     </div>
   </div>
 <% end %>

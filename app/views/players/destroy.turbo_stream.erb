@@ -1,13 +1,15 @@
+<% tournament = @tournament.reload %>
+
 <%= turbo_stream.remove dom_id(@player) %>
 
-<% if @tournament.reload.players_count == 0 %>
+<% if tournament.players_count == 0 %>
   <%= turbo_stream.update "players" do %>
     <p id="no_players" class="text-gray-500 text-center py-8">No players added yet. Add your first player below.</p>
   <% end %>
 <% end %>
 
 <%= turbo_stream.update "players_count" do %>
-  <%= @tournament.players_count %>
+  <%= tournament.players_count %>
 <% end %>
 
-<%= turbo_stream.update "start_tournament_section", partial: "tournaments/start_tournament", locals: { tournament: @tournament.reload } %>
+<%= turbo_stream.update "start_tournament_section", partial: "tournaments/start_tournament", locals: { tournament: tournament } %>
