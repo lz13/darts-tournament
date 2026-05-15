@@ -1,0 +1,16 @@
+<% if @player.persisted? %>
+  <%= turbo_stream.append "players", partial: "players/player", locals: { player: @player, tournament: @tournament } %>
+
+  <%= turbo_stream.update "new_player_form" do %>
+    <%= render "players/form", tournament: @tournament, player: Player.new %>
+  <% end %>
+
+  <%= turbo_stream.remove "no_players" %>
+
+  <% @tournament.reload %>
+  <%= turbo_stream.update "players_count" do %>
+    <%= @tournament.players_count %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.replace "new_player_form", partial: "players/form", locals: { tournament: @tournament, player: @player } %>
+<% end %>
