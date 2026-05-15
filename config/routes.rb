@@ -14,10 +14,18 @@ Rails.application.routes.draw do
   root "pages#home"
 
   # Tournaments
-  resources :tournaments, only: [ :new, :create ]
+  resources :tournaments, only: [ :index, :new, :create ]
+
   # Public tournament view (share link)
   get "t/:share_token", to: "tournaments#show", as: :public_tournament
 
   # Admin tournament view
   get "t/:share_token/admin/:admin_token", to: "tournaments#admin", as: :admin_tournament
+
+  # Start tournament
+  post "t/:share_token/admin/:admin_token/start", to: "tournaments#start", as: :start_tournament
+
+  # Player management (admin only)
+  post "t/:share_token/admin/:admin_token/players", to: "players#create", as: :tournament_players
+  delete "t/:share_token/admin/:admin_token/players/:id", to: "players#destroy", as: :tournament_player
 end
